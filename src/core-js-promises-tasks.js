@@ -145,8 +145,19 @@ async function getAllResult(promises) {
  * [promise1, promise4, promise3] => Promise.resolved('104030')
  * [promise1, promise4, promise3, promise2] => Promise.resolved('10403020')
  */
-function queuePromises(/* promises */) {
-  throw new Error('Not implemented');
+async function queuePromises(promises) {
+  let result = '';
+  let accValue = Promise.resolve();
+  const concatValue = (value) => {
+    result += value;
+  };
+  for (let i = 0; i < promises.length; i += 1) {
+    accValue = accValue
+      .then(() => promises[i])
+      .then((value) => concatValue(value));
+  }
+  await accValue;
+  return result;
 }
 
 module.exports = {
