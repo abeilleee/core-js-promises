@@ -118,8 +118,13 @@ function getAllOrNothing(promises) {
  * [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)] => Promise fulfilled with [1, 2, 3]
  * [Promise.resolve(1), Promise.reject(2), Promise.resolve(3)]  => Promise fulfilled with [1, null, 3]
  */
-function getAllResult(/* promises */) {
-  throw new Error('Not implemented');
+async function getAllResult(promises) {
+  const settledArr = await Promise.allSettled(promises);
+  const result = [];
+  settledArr.forEach((elem) =>
+    elem.status === 'fulfilled' ? result.push(elem.value) : result.push(null)
+  );
+  return result;
 }
 
 /**
